@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактор сайта Кирилла Рукова</title>
+  <style>
+    html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+  padding: 0;
+  margin: 0;
+}
+
+    .wrapper {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    
+
+.wrapper textarea,
+.wrapper input,
+.wrapper button {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding: 10px;
+  font-size: 14px;
+}
+
+
+    .slider-block {
+      margin-bottom: 20px;
+    }
+    .output {
+      white-space: pre-wrap;
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 15px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+
+<h1>Простейший конструктор сайта-сетки,<br>версия 1.0 💫🌺🌸</h1>
+
+<h2>1. Добавить карточку</h2>
+<input type="text" id="imgUrl" placeholder="URL изображения">
+<input type="text" id="title" placeholder="Заголовок">
+<textarea id="desc" placeholder="Описание"></textarea>
+<input type="text" id="link" placeholder="Ссылка">
+
+<h3>Дополнительные примечания</h3>
+<label>Примечание «Акцент» (золотой):</label>
+<input type="text" id="noteAccentText" placeholder="Текст примечания">
+<input type="text" id="noteAccentLink" placeholder="Ссылка">
+
+<label>Примечание «Копия» (чёрный):</label>
+<input type="text" id="noteCopyText" placeholder="Текст примечания">
+<input type="text" id="noteCopyLink" placeholder="Ссылка">
+
+<label>Примечание «Подкаст» (розовый):</label>
+<input type="text" id="notePodcastText" placeholder="Текст примечания">
+<input type="text" id="notePodcastLink" placeholder="Ссылка">
+
+<button onclick="addCard()">Добавить карточку</button>
+
+<h2>2. Редактировать текст в «крыше»</h2>
+<textarea id="intro" rows="4" placeholder="Введите текст для крыши сайта..."></textarea>
+
+<h2>Опционально: загрузить существующий код сайта от предыдущей генерации</h2>
+<textarea id="existingHTML" rows="10" placeholder="Вставьте сюда текущий HTML-код вашего сайта..."></textarea>
+
+<button onclick="generateSite()">Сгенерировать сайт</button>
+<button onclick="downloadHTML()">Скачать HTML-файл</button>
+<button onclick="previewSite()">Обновить предпросмотр</button>
+
+<h2>Тут появится html-код сайта, который вы сгенерируете</h2>
+<div class="output" id="output"></div>
+<h2>Предпросмотр сайта (обновляется по кнопке выше)</h2>
+<iframe id="previewFrame" style="width: 100%; height: 600px; border: 1px solid #ccc;"></iframe>
+
+<script>
+  let cards = [];
+
+  function normalizeUrl(url) {
+    if (!url) return '';
+    if (!/^https?:\/\//i.test(url)) {
+      return 'https://' + url;
+    }
+    return url;
+  }
+
+  function addCard() {
+    const image = document.getElementById('imgUrl').value;
+    const title = document.getElementById('title').value;
+    const desc = document.getElementById('desc').value;
+    let link = normalizeUrl(document.getElementById('link').value);
+
+    let noteAccent = document.getElementById('noteAccentText').value;
+    let noteAccentLink = normalizeUrl(document.getElementById('noteAccentLink').value);
+
+    let noteCopy = document.getElementById('noteCopyText').value;
+    let noteCopyLink = normalizeUrl(document.getElementById('noteCopyLink').value);
+
+    let notePodcast = document.getElementById('notePodcastText').value;
+    let notePodcastLink = normalizeUrl(document.getElementById('notePodcastLink').value);
+
+    let notesHTML = '';
+    if (noteAccent) notesHTML += ' <a href="' + noteAccentLink + '" style="color:#F0BD00">' + noteAccent + '</a>';
+    if (noteCopy) notesHTML += ' <a href="' + noteCopyLink + '" style="color:#333">' + noteCopy + '</a>';
+    if (notePodcast) notesHTML += ' <a href="' + notePodcastLink + '" style="color:#D600D6">' + notePodcast + '</a>';
+
+    const cardHTML = `
+      <div class="grid-item">
+        <a href="${link}">
+          <img src="${image}" alt="Формат: 2:3 (например 240x360px)" title="Формат: 2:3 (например 240×360px)" />
+        </a>
+        <p class="caption"><b><a href="${link}">${title}</a></b> ${desc}${notesHTML}</p>
+      </div>`;
+
+    cards.unshift(cardHTML);
+
+    const modal = document.createElement('div');
+    modal.style.position = 'fixed';
+    modal.style.top = '0';
+    modal.style.left = '0';
+    modal.style.width = '100%';
+    modal.style.height = '100%';
+    modal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+    modal.style.zIndex = '9999';
+
+    const box = document.createElement('div');
+    box.style.background = 'white';
+    box.style.padding = '20px 30px';
+    box.style.borderRadius = '8px';
+    box.style.textAlign = 'center';
+    box.innerHTML = '<p style="margin-bottom:20px;">Карточка добавлена. Нажмите «Хорошо», чтобы продолжить.</p><button id="confirmBtn">Хорошо</button>';
+
+    modal.appendChild(box);
+    document.body.appendChild(modal);
+    document.getElementById('confirmBtn').onclick = function() {
+      document.body.removeChild(modal);
+    };
+
+    document.getElementById('imgUrl').value = '';
+    document.getElementById('title').value = '';
+    document.getElementById('desc').value = '';
+    document.getElementById('link').value = '';
+    document.getElementById('noteAccentText').value = '';
+    document.getElementById('noteAccentLink').value = '';
+    document.getElementById('noteCopyText').value = '';
+    document.getElementById('noteCopyLink').value = '';
+    document.getElementById('notePodcastText').value = '';
+    document.getElementById('notePodcastLink').value = '';
+  }
+
+  function generateSite() {
+    const intro = document.getElementById('intro').value;
+            let existingHTML = document.getElementById('existingHTML').value;
+    let allCardsHTML = cards.join("\n");
+
+    if (existingHTML.includes('<div class="container">')) {
+      allCardsHTML = existingHTML.replace(
+        /<div class="container">/,
+        `<div class="container">\n${allCardsHTML}`
+      );
+    } else {
+      allCardsHTML = `<div class="container">\n${allCardsHTML}\n</div>`;
+    }
+
+    const html = `
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+  padding: 0;
+  margin: 0;
+}
+
+    .wrapper {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    
+      font-family: Arial, sans-serif;
+      background-color: white;
+      padding: 20px;
+      line-height: 1.33;
+    }
+    .container {
+      display: grid;
+      max-width: 960px;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .grid-item img {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+    }
+    .caption {
+      font-size: 15px;
+      color: #333;
+      margin-top: 10px;
+      line-height: 1.33;
+    }
+    .intro-text {
+      font-size: 20px;
+      line-height: 1.33;
+      max-width: 800px;
+      margin: 0 auto 20px auto;
+    }
+    @media screen and (max-width: 900px) {
+      .intro-text {
+        padding-left: 20px;
+        padding-right: 20px;
+        max-width: 100%;
+      }
+      .container {
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 20px;
+        max-width: 100%;
+        padding: 20px;
+      }
+    }
+    @media screen and (max-width: 405px) {
+      .container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+  <title>Истории Кирилла Рукова</title>
+</head>
+<body>
+<div class="wrapper">
+  <p class="intro-text">${intro}</p>
+  ${allCardsHTML}
+</div>
+</body>
+</html>
+    `.trim();
+
+    document.getElementById('output').textContent = html;
+  }
+
+  function downloadHTML() {
+    generateSite();
+    const content = document.getElementById('output').textContent;
+    const blob = new Blob([content], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'rukov_site.html';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function previewSite() {
+    generateSite();
+    const content = document.getElementById('output').textContent;
+    const blob = new Blob([content], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    document.getElementById('previewFrame').src = url;
+  }
+</script>
+
+</div>
+</body>
+</html>
