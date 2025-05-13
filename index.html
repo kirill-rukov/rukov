@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+  padding: 0;
+  margin: 0;
+}
+
+    .wrapper {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    
+      font-family: Arial, sans-serif;
+      background-color: white;
+      padding: 20px;
+      line-height: 1.33;
+    }
+    .container {
+      display: grid;
+      max-width: 960px;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .grid-item img {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+    }
+    .caption {
+      font-size: 15px;
+      color: #333;
+      margin-top: 10px;
+      line-height: 1.33;
+    }
+    .intro-text {
+      font-size: 20px;
+      line-height: 1.33;
+      max-width: 800px;
+      margin: 0 auto 20px auto;
+    }
+    @media screen and (max-width: 900px) {
+      .intro-text {
+        padding-left: 20px;
+        padding-right: 20px;
+        max-width: 100%;
+      }
+      .container {
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 20px;
+        max-width: 100%;
+        padding: 20px;
+      }
+    }
+    @media screen and (max-width: 405px) {
+      .container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+  <title>Истории Кирилла Рукова</title>
+</head>
+<body>
+<div class="wrapper">
+  <p class="intro-text">Большие истории Кирилла Рукова. Мемуары, репортажи, расследования. Репортёр, сценарист и гострайтер. Лауреат четырех премий «Редколлегия», финалист True Story Award 23'. По моим текстам снимают три сериала и один фильм. Ниже — отдельные лучшие истории, которыми я занимался:</p>
+  <div class="container">
+
+      <div class="grid-item">
+        <a href="https://prince.baza.io">
+          <img src="https://kirill-rukov.github.io/rukov/IMG_5919.jpg" alt="Формат: 2:3 (например 240x360px)" title="Формат: 2:3 (например 240×360px)" />
+        </a>
+        <p class="caption"><b><a href="https://prince.baza.io">Как простой парень спас сотни русских рабов — и куда он исчез. </a></b> Эпическая история Олега Мельникова, последнего русского авантюриста. <a href="" style="color:#D600D6">Подкаст скоро.</a></p>
+      </div>
+</div>
+</div>
+</body>
+</html>
