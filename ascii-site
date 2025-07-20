@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASCII Art Site</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #111;
+      color: #eee;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      text-align: center;
+      padding: 2em;
+      font-size: 2em;
+      font-weight: bold;
+    }
+    .ascii-art {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: monospace;
+      font-size: 4px;
+      line-height: 4px;
+      letter-spacing: -0.5px;
+      white-space: pre;
+      margin: 1em 0;
+    }
+    .ascii-line span {
+      display: inline-block;
+    }
+    section {
+      padding: 2em;
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 1em;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <header>ASCII Art Web Page</header>
+
+  <div class="ascii-art">
+    <div class="ascii-line">
+      <span style="color: #ff4444">@</span><span style="color: #ff8800">#</span><span style="color: #ffff00">%</span><span style="color: #88ff00">+</span><span style="color: #00ffff">-</span><span style="color: #4488ff">.</span>
+    </div>
+    <div class="ascii-line">
+      <span style="color: #4488ff">.</span><span style="color: #00ffff">-</span><span style="color: #88ff00">+</span><span style="color: #ffff00">%</span><span style="color: #ff8800">#</span><span style="color: #ff4444">@</span>
+    </div>
+    <div class="ascii-line">
+      <span style="color: #444">.</span><span style="color: #777">:</span><span style="color: #aaa">*</span><span style="color: #fff">#</span><span style="color: #aaa">*</span><span style="color: #777">:</span><span style="color: #444">.</span>
+    </div>
+  </div>
+
+  <section>
+    <p>
+      This is a demo of a fully ASCII-based website. All visual elements you see are constructed from text characters, styled with HTML and CSS. The font size for ASCII art is deliberately smaller to simulate image density.
+    </p>
+    <p>
+      You can generate more ASCII art from tools like <a href="https://emojicombos.com/" style="color: #88f">ASCII generators</a> or using NodeJS/CLI scripts to convert PNG/JPG into HTML blocks.
+    </p>
+  </section>
+
+  <div class="ascii-art">
+    <div class="ascii-line">
+      <span style="color: #ccc">  /\_/\</span>
+    </div>
+    <div class="ascii-line">
+      <span style="color: #ccc"> ( o.o )</span>
+    </div>
+    <div class="ascii-line">
+      <span style="color: #ccc">  > ^ <</span>
+    </div>
+  </div>
+
+  <section>
+    <p>
+      Even complex shapes — like this ASCII cat — can be made using standard keyboard characters. You can automate generation and display them with colors for better readability.
+    </p>
+  </section>
+
+</body>
+</html>
